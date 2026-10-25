@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      PORT: "8000"
+      CACHE_DIR: /app/data
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:4173,http://127.0.0.1:4173}
+    ports:
+      - "8000:8000"
+    volumes:
+      - elexon-cache:/app/data
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ""
+    ports:
+      - "4173:80"
+    depends_on:
+      - backend
+
+volumes:
+  elexon-cache:
